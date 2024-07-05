@@ -7,5 +7,7 @@
 
 ## ERD
 
-User만
+User
+
+
 <img width="449" alt="image" src="https://github.com/sangyunpark99/Payment/assets/96441638/29bf33eb-57a7-4f99-b255-d00bae61e2fd">
