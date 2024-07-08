@@ -87,7 +87,7 @@ public class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
