@@ -1,13 +1,16 @@
 package com.example.payment.member;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.payment.global.error.ControllerAdvice;
+import com.example.payment.member.dto.MemberDto;
 import com.example.payment.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.exception.NotExistMemberException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +64,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("회원가입을 잘못된 이메일 형식의 요청으로 실패한다.")
-    void 회원가입을_잘못된_이메일_형식의_요청으로_실패한다() throws Exception{
+    void 회원가입을_잘못된_이메일_형식의_요청으로_실패한다() throws Exception {
         //given
         final MemberCreateRequest request = new MemberCreateRequest("abcabc.com", "abc123", "abc");
 
@@ -75,7 +78,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("회원가입을 올바르지 않은 형식의 요청으로 실패한다.")
-    void 회원가입을_올바르지_않은_형식의_요청으로_실패한다() throws Exception{
+    void 회원가입을_올바르지_않은_형식의_요청으로_실패한다() throws Exception {
         //given
         final MemberCreateRequest request = new MemberCreateRequest("abcabc.com", "abc123", "abc");
 
@@ -89,7 +92,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("회원가입을 GET 메서드 요청으로 실패한다.")
-    void 회원가입을_GET_메서드_요청으로_실패한다() throws Exception{
+    void 회원가입을_GET_메서드_요청으로_실패한다() throws Exception {
         //given
         final MemberCreateRequest request = new MemberCreateRequest("abcabc.com", "abc123", "abc");
 
@@ -99,5 +102,33 @@ public class MemberControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("회원정보 조회를 성공한다.")
+    void 회원정보_조회를_성공한다() throws Exception {
+        //given
+        final MemberDto memberDto = new MemberDto(1L, "abc@abc.com", "abc");
+
+        //when
+        when(memberService.findMember(anyLong())).thenReturn(memberDto);
+
+        //then
+        mockMvc.perform(get("/api/members/1")
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원정보를 조회해 조회를 실패한다.")
+    void 존재하지_않는_회원정보를_조회해_조회를_실패한다() throws Exception {
+        //given
+
+        //when
+        when(memberService.findMember(anyLong())).thenThrow(new NotExistMemberException());
+
+        //then
+        mockMvc.perform(get("/api/member/2"))
+                .andExpect(status().isNotFound());
     }
 }
