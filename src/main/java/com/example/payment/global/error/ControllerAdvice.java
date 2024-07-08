@@ -1,6 +1,7 @@
 package com.example.payment.global.error;
 
 import com.example.payment.global.error.dto.ErrorResponse;
+import com.example.payment.member.exception.NotExistMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +50,9 @@ public class ControllerAdvice {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-
+    @ExceptionHandler(NotExistMemberException.class)
+    public ResponseEntity<ErrorResponse> handleNotExistMember(NotExistMemberException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 }
