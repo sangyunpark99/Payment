@@ -16,7 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ControllerAdvice {
 
-    private static final String DTO_ERROR_MESSAGE_FORMAT = "%s 필드 %s | 들어온 값 %s";
+    private static final String DTO_ERROR_MESSAGE_FORMAT = "%s 필드는 %s [ 들어온 값 : %s ]";
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequest() {
