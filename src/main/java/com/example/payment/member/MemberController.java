@@ -1,6 +1,7 @@
-package com.example.payment.domain.member.domain;
+package com.example.payment.member;
 
-import com.example.payment.domain.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.response.MemberCreateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,10 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping()
-    public ResponseEntity<Long> createMember(@Valid @RequestBody MemberCreateRequest request) {
-        Long id = memberService.createMember(request);
-        return ResponseEntity.ok(id);
+    @PostMapping
+    public ResponseEntity<MemberCreateResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
+        MemberCreateResponse response = new MemberCreateResponse(memberService.createMember(request));
+        return ResponseEntity.ok(response);
     }
 
 }

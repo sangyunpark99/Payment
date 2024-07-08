@@ -1,6 +1,6 @@
-package com.example.payment.domain.member.domain;
+package com.example.payment.member;
 
-import com.example.payment.domain.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.request.MemberCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

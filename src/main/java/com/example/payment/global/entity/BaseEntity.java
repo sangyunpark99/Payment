@@ -1,4 +1,4 @@
-package com.example.payment.common.entity;
+package com.example.payment.global.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

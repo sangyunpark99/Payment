@@ -1,6 +1,6 @@
-package com.example.payment.domain.member.dto.request;
+package com.example.payment.member.dto.request;
 
-import com.example.payment.domain.member.domain.Member;
+import com.example.payment.member.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
