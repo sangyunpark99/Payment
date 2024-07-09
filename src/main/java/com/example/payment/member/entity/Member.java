@@ -34,4 +34,8 @@ public class Member extends BaseEntity {
 
     @Column(name = "nick_name", nullable = false)
     private String nickName;
+
+    public void updatePassword(final String password) {
+        this.password = password;
+    }
 }

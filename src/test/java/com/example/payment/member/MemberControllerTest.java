@@ -1,16 +1,14 @@
 package com.example.payment.member;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.payment.global.error.ControllerAdvice;
-import com.example.payment.member.dto.MemberDto;
 import com.example.payment.member.dto.request.MemberCreateRequest;
-import com.example.payment.member.exception.NotExistMemberException;
+import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +37,7 @@ public class MemberControllerTest {
     @BeforeEach
     void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(memberController)
-                .setControllerAdvice(ControllerAdvice.class)
+                .setControllerAdvice(new ControllerAdvice())
                 .alwaysDo(print())
                 .build();
     }
@@ -49,10 +47,6 @@ public class MemberControllerTest {
     void 회원가입을_성공한다() throws Exception {
         //given
         final MemberCreateRequest request = new MemberCreateRequest("abc@abc.com", "abc123", "abc");
-        final Long id = 1L;
-
-        //when
-        when(memberService.createMember(request)).thenReturn(id);
 
         //then
         mockMvc.perform(post("/api/members")
@@ -107,13 +101,8 @@ public class MemberControllerTest {
     @Test
     @DisplayName("회원정보 조회를 성공한다.")
     void 회원정보_조회를_성공한다() throws Exception {
-        //given
-        final MemberDto memberDto = new MemberDto(1L, "abc@abc.com", "abc");
 
-        //when
-        when(memberService.findMember(anyLong())).thenReturn(memberDto);
-
-        //then
+        //when, then
         mockMvc.perform(get("/api/members/1")
                 )
                 .andExpect(status().isOk());
@@ -121,14 +110,25 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("존재하지 않는 회원정보를 조회해 조회를 실패한다.")
-    void 존재하지_않는_회원정보를_조회해_조회를_실패한다() throws Exception {
+    void 회원정보_조회를_실패한다() throws Exception {
+
+        //when, then
+        mockMvc.perform(get("/api/members/asdf")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("비밀번호 수정을 성공한다.")
+    void 비밀번호_수정을_성공한다() throws Exception {
         //given
+        final PasswordUpdateRequest request = new PasswordUpdateRequest("abc@abc.com", "abc124");
 
-        //when
-        when(memberService.findMember(anyLong())).thenThrow(new NotExistMemberException());
-
-        //then
-        mockMvc.perform(get("/api/member/2"))
-                .andExpect(status().isNotFound());
+        //when, then
+        mockMvc.perform(put("/api/members/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk());
     }
 }
