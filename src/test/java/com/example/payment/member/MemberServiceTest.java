@@ -3,10 +3,12 @@ package com.example.payment.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.example.payment.member.dto.MemberDto;
 import com.example.payment.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.entity.Member;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -69,5 +71,26 @@ public class MemberServiceTest {
             softAssertions.assertThat(memberDto.nickname()).isEqualTo(member.getNickName());
         });
 
+    }
+
+    @Test
+    @DisplayName("회원의 비밀번호를 변경한다.")
+    void 회원의_비밀번호를_변경한다() throws Exception{
+        //given
+        final Member member = Member.builder()
+                .id(1L)
+                .email("abc@abc.com")
+                .password("abc123")
+                .nickName("abc")
+                .build();
+
+        final PasswordUpdateRequest request = new PasswordUpdateRequest("abc@abc.com", "abc124");
+
+        //when
+        when(memberRepository.getByEmail(anyString())).thenReturn(member);
+        memberService.changePassword(request);
+
+        //then
+        assertThat(request.password()).isEqualTo(member.getPassword());
     }
 }
