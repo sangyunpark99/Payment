@@ -1,12 +1,13 @@
 package com.example.payment.member.exception;
 
-public class NotExistMemberException extends RuntimeException {
+import com.example.payment.global.error.ErrorCode;
+import lombok.Getter;
 
-    public NotExistMemberException(final String message) {
-        super(message);
-    }
+@Getter
+public class NotExistMemberException extends RuntimeException {
+    private String message;
 
     public NotExistMemberException() {
-        this("존재하지 않는 회원입니다.");
+        this.message = ErrorCode.NOT_EXIST_USER.getMessage();
     }
 }
