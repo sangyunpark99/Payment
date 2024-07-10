@@ -1,5 +1,6 @@
 package com.example.payment.member;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -8,11 +9,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.payment.global.error.ControllerAdvice;
 import com.example.payment.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -54,6 +60,25 @@ public class MemberControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidMemberCreateRequest")
+    @DisplayName("필수 필드를 입력하지 않아서 회원가입을 실패한다.")
+    void 필수_필드를_입력하지_않아서_회원가입을_실패한다(MemberCreateRequest request) throws Exception {
+        mockMvc.perform(post("/api/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+    private static Stream<Arguments> provideInvalidMemberCreateRequest() {
+        return Stream.of(
+                Arguments.of(new MemberCreateRequest("abc@abc.com", null, "abc")),
+                Arguments.of(new MemberCreateRequest(null, "abc123", "abc")),
+                Arguments.of(new MemberCreateRequest("abc@abc.com", "abc123", null))
+        );
     }
 
     @Test
@@ -130,5 +155,38 @@ public class MemberControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("회원탈퇴를 성공한다.")
+    void 회원탈퇴를_성공한다() throws Exception {
+        //given
+        final MemberDeleteRequest request = new MemberDeleteRequest("abc@abc.com", "abc123", "박상윤");
+
+        //then
+        mockMvc.perform(delete("/api/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidMemberDeleteRequest")
+    @DisplayName("필수 필드를 입력하지 않아서 회원탈퇴를 실패한다.")
+    void 필수_필드를_입력하지_않아서_회원탈퇴를_실패한다(MemberCreateRequest request) throws Exception {
+        mockMvc.perform(delete("/api/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+    private static Stream<Arguments> provideInvalidMemberDeleteRequest() {
+        return Stream.of(
+                Arguments.of(new MemberDeleteRequest("abc@abc.com", null, "abc")),
+                Arguments.of(new MemberDeleteRequest(null, "abc123", "abc")),
+                Arguments.of(new MemberDeleteRequest("abc@abc.com", "abc123", null))
+        );
     }
 }

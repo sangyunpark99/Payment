@@ -1,15 +1,22 @@
 package com.example.payment.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.payment.member.dto.MemberDto;
 import com.example.payment.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.entity.Member;
+import com.example.payment.member.exception.NotExistMemberException;
+import com.example.payment.member.exception.NotMatchPassword;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +56,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원을 조회한다.")
-    void 회원을_조회한다() throws Exception{
+    void 회원을_조회한다() throws Exception {
         //given
         final Long id = 1L;
         final Member member = Member.builder()
@@ -75,7 +82,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원의 비밀번호를 변경한다.")
-    void 회원의_비밀번호를_변경한다() throws Exception{
+    void 회원의_비밀번호를_변경한다() throws Exception {
         //given
         final Member member = Member.builder()
                 .id(1L)
@@ -92,5 +99,63 @@ public class MemberServiceTest {
 
         //then
         assertThat(request.password()).isEqualTo(member.getPassword());
+    }
+
+    @Test
+    @DisplayName("회원을 삭제한다.")
+    void 회원을_삭제한다() throws Exception {
+        //given
+        final Member member = Member.builder()
+                .id(1L)
+                .email("abc@abc.com")
+                .password("abc123")
+                .nickName("abc")
+                .build();
+
+        final MemberDeleteRequest request = new MemberDeleteRequest("abc@abc.com", "abc123", "abc");
+
+        //when
+        when(memberRepository.getByEmail(anyString())).thenReturn(member);
+        memberService.deleteMember(request);
+
+        //then
+        verify(memberRepository, times(1)).delete(member);
+    }
+
+    @Test
+    @DisplayName("존재하지 않은 회원을 삭제하여 실패한다.")
+    void 존재하지_않은_회원을_삭제하여_실패한다() throws Exception {
+        //given
+        final MemberDeleteRequest request = new MemberDeleteRequest("abc@abc.com", "abc123", "abc");
+
+        //when
+        when(memberRepository.getByEmail(anyString())).thenThrow(NotExistMemberException.class);
+
+        //then
+        assertThatThrownBy(() -> memberService.deleteMember(request))
+                .isInstanceOf(NotExistMemberException.class);
+
+        verify(memberRepository, never()).delete(any(Member.class));
+    }
+
+    @Test
+    @DisplayName("비밀번호가 일치하지 않아 삭제를 실패한다.")
+    void 비밀번호가_일치하지_않아_삭제를_실패한다() throws Exception {
+        //given
+        final MemberDeleteRequest request = new MemberDeleteRequest("abc@abc.com", "abc123", "abc");
+        final Member member = Member.builder()
+                .email("abc@abc.com")
+                .password("abc124")
+                .nickName("abc")
+                .build();
+
+        //when
+        when(memberRepository.getByEmail(anyString())).thenReturn(member);
+
+        //then
+        assertThatThrownBy(() -> memberService.deleteMember(request))
+                .isInstanceOf(NotMatchPassword.class);
+
+        verify(memberRepository, never()).delete(any(Member.class));
     }
 }
