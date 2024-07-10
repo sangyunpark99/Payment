@@ -1,15 +1,19 @@
 package com.example.payment.member;
 
 import static com.example.payment.global.error.ErrorCode.CHANE_PASSWORD_SUCCESS;
+import static com.example.payment.global.error.ErrorCode.DELETE_MEMBER_SUCCESS;
 
 import com.example.payment.member.dto.MemberDto;
 import com.example.payment.member.dto.request.MemberCreateRequest;
+import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.dto.response.MemberCreateResponse;
+import com.example.payment.member.dto.response.MemberDeleteResponse;
 import com.example.payment.member.dto.response.PasswordUpdateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +45,11 @@ public class MemberController {
     public ResponseEntity<PasswordUpdateResponse> updatePassword(@Valid @RequestBody PasswordUpdateRequest request) {
         memberService.changePassword(request);
         return ResponseEntity.ok(new PasswordUpdateResponse(CHANE_PASSWORD_SUCCESS.getMessage()));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<MemberDeleteResponse> deleteMember(@Valid @RequestBody MemberDeleteRequest request) {
+        memberService.deleteMember(request);
+        return ResponseEntity.ok(new MemberDeleteResponse(DELETE_MEMBER_SUCCESS.getMessage()));
     }
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 @DataJpaTest
 public class MemberRepositoryTest {
@@ -86,6 +87,25 @@ public class MemberRepositoryTest {
 
         // when & then
         Assertions.assertThatThrownBy(() -> memberRepository.getByEmail(email))
+                .isInstanceOf(NotExistMemberException.class);
+    }
+
+    @Test
+    @DisplayName("멤버를 저장한 후 삭제한다.")
+    void 멤버를_저장한_후_삭제한다() throws Exception{
+        //given
+        final Member member = new MemberCreateRequest("abc@abc.com", "abc123", "abc").toEntity();
+
+        //when
+        final Member savedMember = memberRepository.save(member);
+
+        em.flush();
+        em.clear();
+
+        //then
+        memberRepository.delete(member);
+
+       Assertions.assertThatThrownBy(() -> memberRepository.getByEmail(member.getEmail()))
                 .isInstanceOf(NotExistMemberException.class);
     }
 }
