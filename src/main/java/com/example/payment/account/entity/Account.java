@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -28,29 +29,20 @@ public class Account extends BaseEntity {
     @Column(name = "account_id")
     private Long id;
 
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", insertable = false, updatable = false)
     private Member member;
 
+    @Getter
     @Column(name = "account_number", nullable = false, updatable = false, length = 10)
     private String accountNumber;
 
+    @Getter
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
     @Column(nullable = false)
     private String password;
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public Member getMember(){
-        return member;
-    }
 
 }
