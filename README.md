@@ -10,3 +10,9 @@
 
 <img width="907" alt="image" src="https://github.com/sangyunpark99/Payment/assets/96441638/caba715e-eebb-45fe-b23d-2d633164be2b">
 
+
+## 상황
+
+당행 이체
+
+타행 이체
