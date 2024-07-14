@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public record AccountCreateResponse(String accountNumber, BigDecimal balance) {
 
-    public static AccountCreateResponse getAccountCreateResponse(AccountDto accountDto){
+    public static AccountCreateResponse to(AccountDto accountDto){
         return new AccountCreateResponse(accountDto.accountNumber(), accountDto.balance());
     }
 }

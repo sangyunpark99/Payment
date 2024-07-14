@@ -5,7 +5,7 @@ import com.example.payment.member.dto.request.MemberCreateRequest;
 import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.entity.Member;
-import com.example.payment.member.exception.NotMatchPassword;
+import com.example.payment.member.exception.NotMatchPasswordException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class MemberService {
         final Member member = memberRepository.getByEmail(request.email());
 
         if (!member.getPassword().equals(request.password())) {
-            throw new NotMatchPassword();
+            throw new NotMatchPasswordException();
         }
         memberRepository.delete(member);
     }

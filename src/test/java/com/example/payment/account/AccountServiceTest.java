@@ -13,6 +13,8 @@ import com.example.payment.member.MemberRepository;
 import com.example.payment.member.entity.Member;
 import com.example.payment.member.exception.NotExistMemberException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -118,5 +120,77 @@ public class AccountServiceTest {
 
         // then
         verify(accountRepository, times(2)).existsByAccountNumber(anyString());
+    }
+
+    @Test
+    @DisplayName("계좌번호로 계좌의 잔액을 가져온다.")
+    void 계좌의_잔액을_가져온다() throws Exception{
+        //given
+        final Member member = Member.builder()
+                .email("abc@abc.com")
+                .password("abc123")
+                .nickName("abc")
+                .build();
+
+        final Account account = Account
+                .builder()
+                .accountNumber("1234567891")
+                .balance(BigDecimal.ZERO)
+                .member(member)
+                .password("1234")
+                .build();
+
+        final String accountNumber = "01234567891";
+
+        //when
+        when(accountRepository.getByAccountNumber(accountNumber)).thenReturn(account);
+
+        //then
+        final AccountDto accountDto = accountService.getBalance(accountNumber);
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(accountDto.accountNumber()).isEqualTo(account.getAccountNumber());
+            softAssertions.assertThat(accountDto.balance()).isEqualTo(account.getBalance());
+        });
+    }
+
+    @Test
+    @DisplayName("이메일로 계좌의 정보를 가져온다.")
+    void 이메일로_계좌의_정보를_가져온다() throws Exception{
+        //given
+        final Account account1 = Account.builder().accountNumber("123456781").password("1234").balance(BigDecimal.ZERO).build();
+        final Account account2 = Account.builder().accountNumber("123456781").password("1234").balance(BigDecimal.ZERO).build();
+        final Account account3 = Account.builder().accountNumber("123456781").password("1234").balance(BigDecimal.ZERO).build();
+
+        final List<Account> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+        accounts.add(account3);
+
+        final Member member = Member.builder()
+                .email("abc@abc.com")
+                .accounts(accounts)
+                .password("abc123")
+                .nickName("abc")
+                .build();
+
+        //when
+        when(memberRepository.getByEmail(anyString())).thenReturn(member);
+
+        //then
+        List<AccountDto> resultAccounts = accountService.getAccounts(member.getEmail());
+
+        Assertions.assertThat(resultAccounts.size()).isEqualTo(3);
+
+        System.out.println(resultAccounts.get(0));
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(resultAccounts.get(0).accountNumber()).isEqualTo("123456781");
+            softAssertions.assertThat(resultAccounts.get(0).balance()).isEqualTo(BigDecimal.ZERO);
+            softAssertions.assertThat(resultAccounts.get(1).accountNumber()).isEqualTo("123456781");
+            softAssertions.assertThat(resultAccounts.get(1).balance()).isEqualTo(BigDecimal.ZERO);
+            softAssertions.assertThat(resultAccounts.get(2).accountNumber()).isEqualTo("123456781");
+            softAssertions.assertThat(resultAccounts.get(2).balance()).isEqualTo(BigDecimal.ZERO);
+        });
     }
 }
