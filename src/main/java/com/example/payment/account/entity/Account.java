@@ -13,36 +13,42 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
-@Builder
 @Table(name = "accounts")
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long id;
 
-    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Getter
     @Column(name = "account_number", nullable = false, updatable = false, length = 10)
     private String accountNumber;
 
-    @Getter
     @Column(nullable = false)
-    private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance;
 
     @Column(nullable = false)
     private String password;
 
+    @Builder
+    public Account(final Member member, final String accountNumber, final BigDecimal balance, final String password) {
+        this.member = member;
+        this.accountNumber = accountNumber;
+        this.balance = BigDecimal.valueOf(100000);
+        this.password = password;
+    }
+
+    public void updateBalance(final BigDecimal balance) {
+        this.balance = balance;
+    }
 }
