@@ -39,7 +39,7 @@ public class TransferService {
         if(!checkWithdrawalMoney(withdrawalAccount, transferAmount)) {
             throw new NotEnoughWithdrawalMoney();
         }
-        final BigDecimal amountAfterWithdrawal =  depositAccount.getBalance().subtract(transferAmount);
+        final BigDecimal amountAfterWithdrawal =  withdrawalAccount.getBalance().subtract(transferAmount);
         withdrawalAccount.updateBalance(amountAfterWithdrawal);
 
         // 4. 입금 계좌에 입금 액수만큼 더해준다.
