@@ -38,7 +38,6 @@ public class MemberServiceTest {
     void 회원을_등록한다() {
         // given
         final Member member = Member.builder()
-                .id(1L)
                 .email("abc@abc.com")
                 .password("abc123")
                 .nickName("abc")
@@ -60,7 +59,6 @@ public class MemberServiceTest {
         //given
         final Long id = 1L;
         final Member member = Member.builder()
-                .id(1L)
                 .email("abc@abc.com")
                 .password("abc123")
                 .nickName("abc")
@@ -85,7 +83,6 @@ public class MemberServiceTest {
     void 회원의_비밀번호를_변경한다() throws Exception {
         //given
         final Member member = Member.builder()
-                .id(1L)
                 .email("abc@abc.com")
                 .password("abc123")
                 .nickName("abc")
@@ -106,7 +103,6 @@ public class MemberServiceTest {
     void 회원을_삭제한다() throws Exception {
         //given
         final Member member = Member.builder()
-                .id(1L)
                 .email("abc@abc.com")
                 .password("abc123")
                 .nickName("abc")
