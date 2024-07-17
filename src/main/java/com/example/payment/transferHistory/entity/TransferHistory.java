@@ -9,8 +9,10 @@ import jakarta.persistence.Id;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TransferHistory extends BaseEntity {
