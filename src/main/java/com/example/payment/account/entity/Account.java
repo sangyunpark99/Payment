@@ -44,7 +44,7 @@ public class Account extends BaseEntity {
     public Account(final Member member, final String accountNumber, final BigDecimal balance, final String password) {
         this.member = member;
         this.accountNumber = accountNumber;
-        this.balance = BigDecimal.valueOf(100000);
+        this.balance = balance;
         this.password = password;
     }
 
