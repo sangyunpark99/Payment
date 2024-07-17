@@ -4,6 +4,7 @@ import com.example.payment.account.exception.NotExistAccountException;
 import com.example.payment.global.error.dto.ErrorResponse;
 import com.example.payment.member.exception.NotExistMemberException;
 import com.example.payment.member.exception.NotMatchPasswordException;
+import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,8 +65,16 @@ public class ControllerAdvice {
     @ExceptionHandler({
             NotMatchPasswordException.class
     })
-    public ResponseEntity<ErrorResponse> handleNotMatch(NotExistMemberException e) {
+    public ResponseEntity<ErrorResponse> handleNotMatch(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler({
+            NotEnoughWithdrawalMoney.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotEnough(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }

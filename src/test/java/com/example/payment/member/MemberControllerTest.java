@@ -175,6 +175,7 @@ public class MemberControllerTest {
     @MethodSource("provideInvalidMemberDeleteRequests")
     @DisplayName("필수 필드를 입력하지 않아서 회원탈퇴를 실패한다.")
     void 필수_필드를_입력하지_않아서_회원탈퇴를_실패한다(MemberDeleteRequest request) throws Exception {
+        //then
         mockMvc.perform(delete("/api/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
