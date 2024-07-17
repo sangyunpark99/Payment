@@ -63,7 +63,7 @@ public class TransferService {
      */
     private boolean checkWithdrawalMoney(final Account withdrawlAccount, final BigDecimal transferAmount) {
         // a.compareTo(b) : a가 b보다 큰 경 1을 return
-        return withdrawlAccount.getBalance().compareTo(transferAmount) == 1;
+        return withdrawlAccount.getBalance().compareTo(transferAmount) != -1;
     }
 
     private boolean checkAccountPassword(final String requestPassword, final String accountPassword) {
