@@ -1,5 +1,6 @@
 package com.example.payment.transfer;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.example.payment.account.AccountRepository;
@@ -57,6 +58,7 @@ public class TransferServiceTest {
         //when
         when(accountRepository.getByAccountNumber(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
         when(accountRepository.getByAccountNumber(depositAccountNumber)).thenReturn(depositAccount);
+        when(transferHistoryRepository.save(any())).thenReturn(any());
 
         //then
         transferService.transfer(request);
