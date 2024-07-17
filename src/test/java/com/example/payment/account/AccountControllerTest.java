@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.payment.account.dto.AccountDto;
 import com.example.payment.account.dto.request.AccountCreateRequest;
-import com.example.payment.account.dto.response.AccountCreateResponse;
 import com.example.payment.global.error.ControllerAdvice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -38,9 +37,6 @@ public class AccountControllerTest {
 
     @MockBean
     AccountController accountController;
-
-    @MockBean
-    AccountCreateResponse accountCreateResponse;
 
     @Autowired
     ObjectMapper objectMapper;
