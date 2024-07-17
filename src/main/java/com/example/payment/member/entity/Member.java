@@ -12,17 +12,14 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @Table(name = "members")
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
     @Id
@@ -41,6 +38,14 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Account> accounts = new ArrayList<>();
+
+    @Builder
+    public Member(final String email, final String password, final String nickName, final List<Account> accounts) {
+        this.email = email;
+        this.password = password;
+        this.nickName = nickName;
+        this.accounts = accounts;
+    }
 
     public void updatePassword(final String password) {
         this.password = password;
