@@ -56,7 +56,7 @@ public class TransferServiceTest {
                 .build();
 
         //when
-        when(accountRepository.getByAccountNumber(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
+        when(accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
         when(accountRepository.getByAccountNumber(depositAccountNumber)).thenReturn(depositAccount);
         when(transferHistoryRepository.save(any())).thenReturn(any());
 
@@ -77,7 +77,7 @@ public class TransferServiceTest {
                 transferAmount, accountNumber);
 
         //when
-        when(accountRepository.getByAccountNumber(withdrawalAccountNumber)).thenThrow(new NotExistAccountException());
+        when(accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber)).thenThrow(new NotExistAccountException());
 
         //then
         Assertions.assertThatThrownBy(() -> transferService.transfer(request)).isInstanceOf(NotExistAccountException.class);
@@ -102,7 +102,7 @@ public class TransferServiceTest {
                 .build();
 
         //when
-        when(accountRepository.getByAccountNumber(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
+        when(accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
         when(accountRepository.getByAccountNumber(depositAccountNumber)).thenThrow(new NotExistAccountException());
 
         //then
@@ -134,7 +134,7 @@ public class TransferServiceTest {
                 .build();
 
         //when
-        when(accountRepository.getByAccountNumber(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
+        when(accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
         when(accountRepository.getByAccountNumber(depositAccountNumber)).thenReturn(depositAccount);
 
         //then
@@ -160,7 +160,7 @@ public class TransferServiceTest {
                 .build  ();
 
         //when
-        when(accountRepository.getByAccountNumber(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
+        when(accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber)).thenReturn(withdrawalAccount);
 
         //then
         Assertions.assertThatThrownBy(() -> transferService.transfer(request)).isInstanceOf(NotMatchPasswordException.class);
