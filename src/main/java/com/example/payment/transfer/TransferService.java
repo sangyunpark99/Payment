@@ -27,7 +27,7 @@ public class TransferService {
         final BigDecimal transferAmount = request.transferAmount();
 
         // 1. 계좌의 존재 여부를 확인한다.
-        Account withdrawalAccount = accountRepository.getByAccountNumber(withdrawalAccountNumber);
+        Account withdrawalAccount = accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber);
         Account depositAccount = accountRepository.getByAccountNumber(depositAccountNumber);
 
         // 2. 비밀번호 일치여부를 확인한다.
