@@ -16,7 +16,7 @@ import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.entity.Member;
 import com.example.payment.member.exception.NotExistMemberException;
-import com.example.payment.member.exception.NotMatchPasswordException;
+import com.example.payment.global.exception.NotMatchPasswordException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

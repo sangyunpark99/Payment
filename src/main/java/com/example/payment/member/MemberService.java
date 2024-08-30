@@ -5,7 +5,7 @@ import com.example.payment.member.dto.request.MemberCreateRequest;
 import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.entity.Member;
-import com.example.payment.member.exception.NotMatchPasswordException;
+import com.example.payment.global.exception.NotMatchPasswordException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,7 +6,7 @@ import com.example.payment.account.entity.Account;
 import com.example.payment.account.utils.AccountUtils;
 import com.example.payment.member.MemberRepository;
 import com.example.payment.member.entity.Member;
-import com.example.payment.member.exception.NotMatchPasswordException;
+import com.example.payment.global.exception.NotMatchPasswordException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

@@ -72,9 +72,8 @@ public class AccountControllerTest {
     @ParameterizedTest
     @MethodSource("provideInvalidAccountCreateRequest")
     @DisplayName("올바른 요청을 보내지 않아, 계좌 생성을 실패한다.")
-    void 계좌_비밀번호를_4글자_입력하지_않아_계좌_생성을_실패한다() throws Exception {
+    void 계좌_비밀번호를_4글자_입력하지_않아_계좌_생성을_실패한다(AccountCreateRequest request) throws Exception {
         //given
-        final AccountCreateRequest request = new AccountCreateRequest("abc@abc.com", "abc123", "123");
         final AccountDto accountDto = new AccountDto("1234567891", BigDecimal.ZERO);
 
         //when
