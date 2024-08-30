@@ -1,4 +1,4 @@
-package com.example.payment.member.exception;
+package com.example.payment.global.exception;
 
 import com.example.payment.global.error.ErrorCode;
 
