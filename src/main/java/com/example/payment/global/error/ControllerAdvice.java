@@ -3,7 +3,7 @@ package com.example.payment.global.error;
 import com.example.payment.account.exception.NotExistAccountException;
 import com.example.payment.global.error.dto.ErrorResponse;
 import com.example.payment.member.exception.NotExistMemberException;
-import com.example.payment.member.exception.NotMatchPasswordException;
+import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
