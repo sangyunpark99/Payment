@@ -6,6 +6,7 @@ import com.example.payment.member.dto.request.MemberDeleteRequest;
 import com.example.payment.member.dto.request.PasswordUpdateRequest;
 import com.example.payment.member.entity.Member;
 import com.example.payment.global.exception.NotMatchPasswordException;
+import com.example.payment.member.exception.AlreadyExistedUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Long createMember(final MemberCreateRequest request) {
-        return memberRepository.save(request.toEntity()).getId();
+
+        Member member = request.toEntity();
+
+        if(checkAlreadyExistedUser(member)) {
+            throw new AlreadyExistedUserException();
+        }
+
+        return memberRepository.save(member).getId();
     }
 
     @Transactional(readOnly = true)
@@ -42,5 +50,9 @@ public class MemberService {
             throw new NotMatchPasswordException();
         }
         memberRepository.delete(member);
+    }
+
+    private boolean checkAlreadyExistedUser(Member member) {
+        return memberRepository.findByEmail(member.getEmail()).isPresent();
     }
 }

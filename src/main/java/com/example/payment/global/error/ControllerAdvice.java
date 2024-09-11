@@ -2,6 +2,7 @@ package com.example.payment.global.error;
 
 import com.example.payment.account.exception.NotExistAccountException;
 import com.example.payment.global.error.dto.ErrorResponse;
+import com.example.payment.member.exception.AlreadyExistedUserException;
 import com.example.payment.member.exception.NotExistMemberException;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
@@ -74,6 +75,14 @@ public class ControllerAdvice {
             NotEnoughWithdrawalMoney.class
     })
     public ResponseEntity<ErrorResponse> handleNotEnough(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler({
+            AlreadyExistedUserException.class
+    })
+    public ResponseEntity<ErrorResponse> handleExisted(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

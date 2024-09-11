@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 
     NOT_EXIST_USER("존재하지 않는 사용자입니다."),
+    ALREADY_EXISTED_USER("이미 가입한 유저입니다."),
     NOT_EXIST_ACCOUNT("존재하지 않는 계좌입니다."),
     NOT_MATCH_PASSWORD("비밀번호가 일치하지 않습니다."),
     CHANE_PASSWORD_SUCCESS("비밀번호 변경이 완료되었습니다."),
