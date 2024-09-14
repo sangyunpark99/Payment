@@ -1,6 +1,6 @@
 package com.example.payment.account;
 
-import com.example.payment.account.entity.Account;
+import com.example.payment.account.domain.Account;
 import com.example.payment.account.exception.NotExistAccountException;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;

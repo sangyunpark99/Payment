@@ -1,7 +1,7 @@
 package com.example.payment.deposit;
 
 import com.example.payment.account.AccountRepository;
-import com.example.payment.account.entity.Account;
+import com.example.payment.account.domain.Account;
 import com.example.payment.deposit.dto.request.DepositRequest;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import java.math.BigDecimal;

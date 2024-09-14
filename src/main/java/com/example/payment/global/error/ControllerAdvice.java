@@ -1,10 +1,14 @@
 package com.example.payment.global.error;
 
+import com.example.payment.account.exception.AlreadyUnregisteredException;
+import com.example.payment.account.exception.AlreadyExistedBalanceException;
+import com.example.payment.account.exception.NotEqualAccountUserException;
 import com.example.payment.account.exception.NotExistAccountException;
 import com.example.payment.global.error.dto.ErrorResponse;
+import com.example.payment.global.exception.NotMatchPasswordException;
+import com.example.payment.member.exception.AlreadyExistedFiveAccount;
 import com.example.payment.member.exception.AlreadyExistedUserException;
 import com.example.payment.member.exception.NotExistMemberException;
-import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +29,8 @@ public class ControllerAdvice {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequest() {
-        ErrorResponse errorResponse = new ErrorResponse("올바르지 않은 형식의 Request Body 입니다.");
+        ErrorResponse errorResponse = new ErrorResponse(
+                "올바르지 않은 형식의 Request Body 입니다.");
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
@@ -37,18 +42,23 @@ public class ControllerAdvice {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleNotSupportedMethod() {
-        ErrorResponse errorResponse = new ErrorResponse("지원하지 않는 HTTP 메소드 요청 입니다.");
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
+        ErrorResponse errorResponse = new ErrorResponse(
+                "지원하지 않는 HTTP 메소드 요청 입니다.");
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(errorResponse);
     }
 
     /**
      * @Valid 요건을 충족 시키기 못한 경우
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidDtoField(final MethodArgumentNotValidException e) {
+    public ResponseEntity<ErrorResponse> handleInvalidDtoField(
+            final MethodArgumentNotValidException e) {
         FieldError firstFieldError = e.getFieldErrors().get(0);
-        String errorMessage = String.format(DTO_ERROR_MESSAGE_FORMAT, firstFieldError.getField(),
-                firstFieldError.getDefaultMessage(), firstFieldError.getRejectedValue());
+        String errorMessage = String.format(DTO_ERROR_MESSAGE_FORMAT,
+                firstFieldError.getField(),
+                firstFieldError.getDefaultMessage(),
+                firstFieldError.getRejectedValue());
 
         ErrorResponse errorResponse = new ErrorResponse(errorMessage);
         return ResponseEntity.badRequest().body(errorResponse);
@@ -64,7 +74,8 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NotMatchPasswordException.class
+            NotMatchPasswordException.class,
+            NotEqualAccountUserException.class,
     })
     public ResponseEntity<ErrorResponse> handleNotMatch(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
@@ -76,14 +87,19 @@ public class ControllerAdvice {
     })
     public ResponseEntity<ErrorResponse> handleNotEnough(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 
     @ExceptionHandler({
-            AlreadyExistedUserException.class
+            AlreadyExistedUserException.class,
+            AlreadyExistedFiveAccount.class,
+            AlreadyUnregisteredException.class,
+            AlreadyExistedBalanceException.class,
     })
     public ResponseEntity<ErrorResponse> handleExisted(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 }

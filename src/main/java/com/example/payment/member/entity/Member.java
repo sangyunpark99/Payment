@@ -1,6 +1,6 @@
 package com.example.payment.member.entity;
 
-import com.example.payment.account.entity.Account;
+import com.example.payment.account.domain.Account;
 import com.example.payment.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
