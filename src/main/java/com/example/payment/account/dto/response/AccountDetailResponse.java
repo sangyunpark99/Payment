@@ -13,7 +13,7 @@ public record AccountDetailResponse(
 ) {
 
     public static AccountDetailResponse to(AccountDto accountDto) {
-        return new AccountDetailResponse(accountDto.getAccountNumber(),
-                String.format("%d", accountDto.getBalance().toBigInteger()));
+        return new AccountDetailResponse(accountDto.accountNumber(),
+                String.format("%d", accountDto.balance().toBigInteger()));
     }
 }
