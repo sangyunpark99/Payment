@@ -1,17 +1,19 @@
 package com.example.payment.account.dto.request;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 public record AccountDeleteRequest(
         @NotBlank @Email
         String email,
 
-        @NotBlank @Size(min = 10, max = 10)
+        @NotBlank
         String accountNumber,
 
-        @NotBlank
+        @NotBlank @Length(min = 4, max = 4)
         String password
 ) {
 }
