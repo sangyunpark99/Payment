@@ -3,7 +3,7 @@ package com.example.payment.transfer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.payment.account.AccountRepository;
-import com.example.payment.account.entity.Account;
+import com.example.payment.account.domain.Account;
 import com.example.payment.member.MemberRepository;
 import com.example.payment.member.entity.Member;
 import com.example.payment.transfer.dto.reqeust.TransferRequest;
