@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.example.payment.account.AccountRepository;
-import com.example.payment.account.entity.Account;
+import com.example.payment.account.domain.Account;
 import com.example.payment.account.exception.NotExistAccountException;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.transfer.dto.reqeust.TransferRequest;

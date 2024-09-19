@@ -1,7 +1,7 @@
 package com.example.payment.transfer;
 
 import com.example.payment.account.AccountRepository;
-import com.example.payment.account.entity.Account;
+import com.example.payment.account.domain.Account;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.transfer.dto.reqeust.TransferRequest;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
