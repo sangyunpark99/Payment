@@ -52,6 +52,7 @@ public class AccountServiceTest {
                 .email("abc@abc.com")
                 .password("abc123")
                 .nickName("abc")
+                .accounts(new ArrayList<>())
                 .build();
 
         final Account account = Account
