@@ -1,11 +1,11 @@
 package com.example.payment.transaction;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.payment.global.error.ControllerAdvice;
 import com.example.payment.transaction.domain.TransactionResult;
 import com.example.payment.transaction.dto.TransactionDto;
 import com.example.payment.transaction.dto.request.TransactionRequest;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +23,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @WebMvcTest(controllers = TransactionController.class)
 public class TransactionControllerTest {
@@ -38,15 +36,8 @@ public class TransactionControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
     MockMvc mockMvc;
-
-    @BeforeEach
-    public void init() {
-        mockMvc = MockMvcBuilders.standaloneSetup(transactionController)
-                .setControllerAdvice(new ControllerAdvice())
-                .alwaysDo(print())
-                .build();
-    }
 
     @Test
     @DisplayName("잔액 사용을 성공한다.")
@@ -63,7 +54,7 @@ public class TransactionControllerTest {
         mockMvc.perform(post("/api/transaction")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
-        ).andExpect(status().isOk());
+        ).andDo(print()).andExpect(status().isOk());
     }
 
     @ParameterizedTest
