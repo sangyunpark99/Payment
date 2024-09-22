@@ -24,4 +24,6 @@ public class TransferController {
         transferService.transfer(request);
         return ResponseEntity.ok(new TransferResponse(TRANSFER_SUCCESS));
     }
+
+
 }
