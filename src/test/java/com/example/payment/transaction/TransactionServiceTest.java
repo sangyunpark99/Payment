@@ -18,6 +18,7 @@ import com.example.payment.transaction.domain.TransactionResult;
 import com.example.payment.transaction.domain.TransactionType;
 import com.example.payment.transaction.dto.TransactionDto;
 import com.example.payment.transaction.dto.request.TransactionRequest;
+import com.example.payment.transaction.exception.NotUseAccountException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -213,6 +214,39 @@ public class TransactionServiceTest {
         //then
         Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
                 .isInstanceOf(NotEnoughWithdrawalMoney.class);
+    }
+
+    @Test
+    @DisplayName("이미 해지된 계정으로 인해 잔액 사용 실패")
+    void 이미_해지된_계정으로_인해_잔액_사용_실패() throws Exception {
+        //given
+        TransactionRequest request = new TransactionRequest("abc@abc.com", "1234567891", "1234",
+                BigDecimal.valueOf(10000));
+
+        Member member = Member.builder()
+                .email("abc@abc.com")
+                .nickName("abc")
+                .password("1234")
+                .accounts(new ArrayList<>())
+                .build();
+
+        Account account = Account.builder()
+                .accountNumber("1234567891")
+                .balance(BigDecimal.valueOf(0))
+                .member(member)
+                .password("1234")
+                .build();
+
+        account.updateUnregisteredAt();
+
+        member.getAccounts().add(account);
+
+        //when
+        when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
+
+        //then
+        Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
+                .isInstanceOf(NotUseAccountException.class);
     }
 
     @Test
