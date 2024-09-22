@@ -10,6 +10,7 @@ public enum ErrorCode {
     NOT_EXIST_USER("존재하지 않는 사용자입니다."),
     ALREADY_EXISTED_USER("이미 가입한 유저입니다."),
     NOT_EXIST_ACCOUNT("존재하지 않는 계좌입니다."),
+    NOT_USE_ACCOUNT("해지된 계좌입니다."),
     ALREADY_EXISTED_FIVE_ACCOUNT("이미 5계의 계좌가 존재합니다."),
     ALREADY_EXISTED_BALANCE("계좌에 잔액이 존재합니다."),
     ALREADY_UNREGISTERED("이미 해지된 계좌입니다."),
