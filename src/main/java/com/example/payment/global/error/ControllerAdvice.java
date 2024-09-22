@@ -4,7 +4,7 @@ import com.example.payment.account.exception.AlreadyUnregisteredException;
 import com.example.payment.account.exception.AlreadyExistedBalanceException;
 import com.example.payment.account.exception.NotEqualAccountUserException;
 import com.example.payment.account.exception.NotExistAccountException;
-import com.example.payment.global.error.dto.ErrorResponse;
+import com.example.payment.global.error.response.ErrorResponse;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.member.exception.AlreadyExistedFiveAccount;
 import com.example.payment.member.exception.AlreadyExistedUserException;
