@@ -2,6 +2,8 @@ package com.example.payment.transaction;
 
 import com.example.payment.account.AccountRepository;
 import com.example.payment.account.domain.Account;
+import com.example.payment.account.domain.AccountStatus;
+import com.example.payment.account.exception.AlreadyUnregisteredException;
 import com.example.payment.account.exception.NotEqualAccountUserException;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.transaction.domain.Transaction;
@@ -9,6 +11,7 @@ import com.example.payment.transaction.domain.TransactionResult;
 import com.example.payment.transaction.domain.TransactionType;
 import com.example.payment.transaction.dto.TransactionDto;
 import com.example.payment.transaction.dto.request.TransactionRequest;
+import com.example.payment.transaction.exception.NotUseAccountException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,6 +46,12 @@ public class TransactionService {
             if(!request.password().equals(account.getPassword())) {
                 throw new NotMatchPasswordException();
             }
+
+            // 계좌 해지 여부 검사
+            if(account.getStatus() == AccountStatus.NOT_IN_USE) {
+                throw new NotUseAccountException();
+            }
+
             // 잔액 검사
             if(!checkTransactionAmount(account, request.amount())) {
                 throw new NotEnoughWithdrawalMoney();
