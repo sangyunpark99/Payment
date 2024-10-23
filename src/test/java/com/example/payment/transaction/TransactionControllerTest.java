@@ -1,5 +1,6 @@
 package com.example.payment.transaction;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -7,7 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.payment.transaction.domain.TransactionResult;
 import com.example.payment.transaction.dto.TransactionDto;
+import com.example.payment.transaction.dto.request.TransactionCancelRequest;
 import com.example.payment.transaction.dto.request.TransactionRequest;
+import com.example.payment.transaction.dto.response.TransactionCancelResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -65,6 +68,7 @@ public class TransactionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                 )
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -76,5 +80,24 @@ public class TransactionControllerTest {
                 Arguments.of(new TransactionRequest("abc@abc.com", "1234567891", null,BigDecimal.valueOf(10000))),
                 Arguments.of(new TransactionRequest("abc@abc.com", "1234567891", "1234",null))
         );
+    }
+
+    @Test
+    @DisplayName("잔액 사용 취소를 성공한다.")
+    void 잔액_사용_취소_성공 () throws Exception{
+        //given
+        TransactionCancelRequest request = new TransactionCancelRequest(1L, "1234567891", 1000L);
+        TransactionDto transactionDto = new TransactionDto(1L, "1234567891", TransactionResult.FAIL, BigDecimal.valueOf(10000),
+                LocalDateTime.now(), BigDecimal.valueOf(0));
+        //when
+        when(transactionService.transactionCancel(any(TransactionCancelRequest.class))).thenReturn(transactionDto);
+
+        //then
+        mockMvc.perform(post("/api/transaction/cancel")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        )
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

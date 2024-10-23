@@ -27,8 +27,10 @@ public class TransactionController {
     }
 
     @PostMapping("/cancel")
-    public ResponseEntity<TransactionCancelResponse> transactionCancel(@RequestBody @Valid TransactionCancelRequest request) {
+    public ResponseEntity<TransactionDto> transactionCancel(@RequestBody @Valid TransactionCancelRequest request) {
         TransactionDto transactionDto = transactionService.transactionCancel(request);
-        return ResponseEntity.ok(TransactionCancelResponse.fromDto(transactionDto));
+        TransactionCancelResponse response = TransactionCancelResponse.fromDto(transactionDto);
+        System.out.println(response.transactedAt());
+        return ResponseEntity.ok(transactionDto);
     }
 }

@@ -80,7 +80,7 @@ public class TransactionService {
     @Transactional(noRollbackFor = {
             NotMatchPasswordException.class,NotEqualAccountUserException.class, NotEnoughWithdrawalMoney.class
     })
-    public TransactionDto transactionCancel(final TransactionCancelRequest request){
+    public TransactionDto transactionCancel(final TransactionCancelRequest request){ // 취소가 되도 로그를 기록
 
         Account account = accountRepository.getByAccountNumber(request.accountNumber());
 
