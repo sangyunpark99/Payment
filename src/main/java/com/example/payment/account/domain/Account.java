@@ -63,8 +63,16 @@ public class Account extends BaseEntity {
         this.status = IN_USE;
     }
 
-    public void updateBalance(final BigDecimal balance) {
-        this.balance = balance;
+    public void addBalance(final BigDecimal balance) {
+        this.balance = this.balance.add(balance);
+    }
+
+    public void subtractBalance(final BigDecimal balance) {
+        this.balance = this.balance.subtract(balance);
+    }
+
+    public void cancelBalance(final BigDecimal balance) {
+        this.balance = this.balance.add(balance);
     }
 
     public void updateUnregisteredAt() {

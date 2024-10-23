@@ -102,7 +102,7 @@ public class TransferConcurrencyTest {
             assertThat(accountC.getBalance().toBigInteger()).isEqualTo(BigInteger.valueOf(10000));
         }
 
-        assertThat(count).isEqualTo(1);
+        assertThat(count).isEqualTo(1L);
     }
 
     private void transferTo(ExecutorService executorService, CountDownLatch latch, TransferRequest request) {

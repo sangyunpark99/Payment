@@ -47,7 +47,7 @@ public class TransactionControllerTest {
                 LocalDateTime.now(), BigDecimal.valueOf(0));
 
         //when
-        when(transactionService.transaction(request)).thenReturn(transactionDto);
+        when(transactionService.transactionUse(request)).thenReturn(transactionDto);
 
         //then
         mockMvc.perform(post("/api/transaction")

@@ -5,6 +5,6 @@ import com.example.payment.global.error.ErrorCode;
 public class NotExistAccountException extends RuntimeException {
 
     public NotExistAccountException() {
-        super(ErrorCode.NOT_EXIST_USER.getMessage());
+        super(ErrorCode.NOT_EXIST_ACCOUNT.getMessage());
     }
 }

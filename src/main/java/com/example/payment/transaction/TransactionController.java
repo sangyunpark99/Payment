@@ -1,7 +1,9 @@
 package com.example.payment.transaction;
 
 import com.example.payment.transaction.dto.TransactionDto;
+import com.example.payment.transaction.dto.request.TransactionCancelRequest;
 import com.example.payment.transaction.dto.request.TransactionRequest;
+import com.example.payment.transaction.dto.response.TransactionCancelResponse;
 import com.example.payment.transaction.dto.response.TransactionResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +22,13 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<TransactionResponse> transaction(@RequestBody @Valid TransactionRequest request) {
-        TransactionDto transactionDto = transactionService.transaction(request);
+        TransactionDto transactionDto = transactionService.transactionUse(request);
         return ResponseEntity.ok(TransactionResponse.fromDto(transactionDto));
     }
 
-
+    @PostMapping("/cancel")
+    public ResponseEntity<TransactionCancelResponse> transactionCancel(@RequestBody @Valid TransactionCancelRequest request) {
+        TransactionDto transactionDto = transactionService.transactionCancel(request);
+        return ResponseEntity.ok(TransactionCancelResponse.fromDto(transactionDto));
+    }
 }

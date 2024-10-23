@@ -81,7 +81,7 @@ public class TransactionServiceTest {
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
 
         //then
-        TransactionDto transactionDto = transactionService.transaction(request);
+        TransactionDto transactionDto = transactionService.transactionUse(request);
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(transactionDto.transactionId()).isEqualTo(transaction.getId());
@@ -119,7 +119,7 @@ public class TransactionServiceTest {
         when(accountRepository.getByAccountNumber(anyString())).thenThrow(NotExistAccountException.class);
 
         //then
-        Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
+        Assertions.assertThatThrownBy(() -> transactionService.transactionUse(request))
                 .isInstanceOf(NotExistAccountException.class);
     }
 
@@ -150,7 +150,7 @@ public class TransactionServiceTest {
         when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
 
         //then
-        Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
+        Assertions.assertThatThrownBy(() -> transactionService.transactionUse(request))
                 .isInstanceOf(NotEqualAccountUserException.class);
     }
 
@@ -181,7 +181,7 @@ public class TransactionServiceTest {
         when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
 
         //then
-        Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
+        Assertions.assertThatThrownBy(() -> transactionService.transactionUse(request))
                 .isInstanceOf(NotMatchPasswordException.class);
     }
 
@@ -212,7 +212,7 @@ public class TransactionServiceTest {
         when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
 
         //then
-        Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
+        Assertions.assertThatThrownBy(() -> transactionService.transactionUse(request))
                 .isInstanceOf(NotEnoughWithdrawalMoney.class);
     }
 
@@ -245,7 +245,7 @@ public class TransactionServiceTest {
         when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
 
         //then
-        Assertions.assertThatThrownBy(() -> transactionService.transaction(request))
+        Assertions.assertThatThrownBy(() -> transactionService.transactionUse(request))
                 .isInstanceOf(NotUseAccountException.class);
     }
 
@@ -276,7 +276,7 @@ public class TransactionServiceTest {
         when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
 
         //then
-        assertThatThrownBy(() -> transactionService.transaction(request))
+        assertThatThrownBy(() -> transactionService.transactionUse(request))
                 .isInstanceOf(NotEnoughWithdrawalMoney.class);
 
         verify(transactionRepository, times(1)).save(any(Transaction.class));
