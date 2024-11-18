@@ -10,7 +10,6 @@ import com.example.payment.transaction.domain.TransactionResult;
 import com.example.payment.transaction.dto.TransactionDto;
 import com.example.payment.transaction.dto.request.TransactionCancelRequest;
 import com.example.payment.transaction.dto.request.TransactionRequest;
-import com.example.payment.transaction.dto.response.TransactionCancelResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -17,12 +17,14 @@ import com.example.payment.transaction.domain.Transaction;
 import com.example.payment.transaction.domain.TransactionResult;
 import com.example.payment.transaction.domain.TransactionType;
 import com.example.payment.transaction.dto.TransactionDto;
+import com.example.payment.transaction.dto.request.TransactionCancelRequest;
 import com.example.payment.transaction.dto.request.TransactionRequest;
 import com.example.payment.transaction.exception.NotUseAccountException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -280,5 +282,66 @@ public class TransactionServiceTest {
                 .isInstanceOf(NotEnoughWithdrawalMoney.class);
 
         verify(transactionRepository, times(1)).save(any(Transaction.class));
+    }
+
+    @Test
+    @DisplayName("거래 취소")
+    void 잔액_사용_취소_성공() throws Exception{
+        //given
+        TransactionRequest request = new TransactionRequest("abc@abc.com", "1234567891", "1234",
+                BigDecimal.valueOf(10000));
+
+        TransactionCancelRequest cancelRequest = new TransactionCancelRequest(
+                1L,"1234567891",10000L
+        );
+
+        Member member = Member.builder()
+                .email("abc@abc.com")
+                .nickName("abc")
+                .password("1234")
+                .accounts(new ArrayList<>())
+                .build();
+
+        Account account = Account.builder()
+                .accountNumber("1234567891")
+                .balance(BigDecimal.valueOf(100000))
+                .member(member)
+                .password("1234")
+                .build();
+
+        member.getAccounts().add(account);
+
+        Transaction transaction = Transaction.builder()
+                .transactionType(TransactionType.USE)
+                .amountAfterTransaction(account.getBalance().subtract(request.amount()))
+                .transactionResult(TransactionResult.SUCCESS)
+                .account(account)
+                .amount(request.amount())
+                .transactedAt(LocalDateTime.now())
+                .build();
+
+        Transaction cancelTransaction = Transaction.builder()
+                .transactionType(TransactionType.CANCEL)
+                .amountAfterTransaction(account.getBalance())
+                .transactionResult(TransactionResult.SUCCESS)
+                .account(account)
+                .amount(BigDecimal.valueOf(cancelRequest.amount()))
+                .transactedAt(LocalDateTime.now())
+                .build();
+
+        //when
+        when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
+        when(transactionRepository.findById(any(Long.class))).thenReturn(Optional.of(transaction));
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(cancelTransaction);
+        //then
+        TransactionDto cancelTransactionDto = transactionService.transactionCancel(cancelRequest);
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(cancelTransactionDto.transactionId()).isEqualTo(cancelTransaction.getId());
+            softAssertions.assertThat(cancelTransactionDto.transactedAt()).isEqualTo(cancelTransaction.getTransactedAt());
+            softAssertions.assertThat(cancelTransactionDto.transactionResult()).isEqualTo(cancelTransaction.getTransactionResult());
+            softAssertions.assertThat(cancelTransactionDto.amount()).isEqualTo(cancelTransaction.getAmount());
+            softAssertions.assertThat(cancelTransactionDto.amountAfterTransaction()).isEqualTo(cancelTransaction.getAmountAfterTransaction());
+        });
     }
 }
