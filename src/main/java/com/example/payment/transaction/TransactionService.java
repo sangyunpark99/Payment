@@ -146,11 +146,7 @@ public class TransactionService {
 
     private void validateTransactionCancel(final TransactionCancelRequest request, final Transaction transaction, final Account account) {
 
-        log.info("request.amount = {}",request.amount());
-        log.info("transaction.getAmount = {}",transaction.getAmount().setScale(0));
-
-
-        if(!Objects.equals(transaction.getAccount().getId(), account.getId())) { // 거래 계좌가 일치하지 않은 경우
+        if(!Objects.equals(transaction.getAccount().getAccountNumber(), request.accountNumber())) { // 거래 계좌가 일치하지 않은 경우
             throw new NotMatchTransactionAccountException();
         }
 

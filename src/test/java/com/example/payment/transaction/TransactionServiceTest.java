@@ -19,7 +19,10 @@ import com.example.payment.transaction.domain.TransactionType;
 import com.example.payment.transaction.dto.TransactionDto;
 import com.example.payment.transaction.dto.request.TransactionCancelRequest;
 import com.example.payment.transaction.dto.request.TransactionRequest;
+import com.example.payment.transaction.exception.NotMatchTransactionAccountException;
+import com.example.payment.transaction.exception.NotMatchTransactionAmountException;
 import com.example.payment.transaction.exception.NotUseAccountException;
+import com.example.payment.transaction.exception.OldTransactionOrderException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -252,8 +255,8 @@ public class TransactionServiceTest {
     }
 
     @Test
-    @DisplayName("트랜잭션이 실패시 잔금 실패 내용 저장")
-    void 트랜잭션이_실패시_잔금_실패_내용_저장() throws Exception {
+    @DisplayName("잔액사용 실패시 잔금 실패 내용 저장")
+    void 잔액_사용_실패시_잔금_실패_내용_저장() throws Exception {
         //given
         TransactionRequest request = new TransactionRequest("abc@abc.com", "1234567891", "1234",
                 BigDecimal.valueOf(10000));
@@ -285,7 +288,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    @DisplayName("거래 취소")
+    @DisplayName("잔액 사용 취소")
     void 잔액_사용_취소_성공() throws Exception{
         //given
         TransactionRequest request = new TransactionRequest("abc@abc.com", "1234567891", "1234",
@@ -343,5 +346,137 @@ public class TransactionServiceTest {
             softAssertions.assertThat(cancelTransactionDto.amount()).isEqualTo(cancelTransaction.getAmount());
             softAssertions.assertThat(cancelTransactionDto.amountAfterTransaction()).isEqualTo(cancelTransaction.getAmountAfterTransaction());
         });
+    }
+
+    @Test
+    @DisplayName("계좌가 일치 하지 않아 잔액 사용 취소 실패")
+    void 계좌가_일치_하지_않아_잔액_사용_취소_실패() throws Exception{
+        //given
+        TransactionRequest request = new TransactionRequest("abc@abc.com", "12345678876", "1234",
+                BigDecimal.valueOf(10000));
+
+        TransactionCancelRequest cancelRequest = new TransactionCancelRequest(
+                1L,"1234567891",10000L
+        );
+
+        Member member = Member.builder()
+                .email("abc@abc.com")
+                .nickName("abc")
+                .password("1234")
+                .accounts(new ArrayList<>())
+                .build();
+
+        Account account = Account.builder()
+                .accountNumber("234567891")
+                .balance(BigDecimal.valueOf(100000))
+                .member(member)
+                .password("1234")
+                .build();
+
+        member.getAccounts().add(account);
+
+        Transaction transaction = Transaction.builder()
+                .transactionType(TransactionType.USE)
+                .amountAfterTransaction(account.getBalance().subtract(request.amount()))
+                .transactionResult(TransactionResult.SUCCESS)
+                .account(account)
+                .amount(request.amount())
+                .transactedAt(LocalDateTime.now())
+                .build();
+        //when
+        when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
+        when(transactionRepository.findById(any(Long.class))).thenReturn(Optional.of(transaction));
+
+        //then
+        assertThatThrownBy(() -> transactionService.transactionCancel(cancelRequest))
+                .isInstanceOf(NotMatchTransactionAccountException.class);
+    }
+
+    @Test
+    @DisplayName("취소한 잔액이 일치 하지 않아 잔액 사용 취소 실패")
+    void 취소한_잔액이_일치_하지_않아_잔액_사용_취소_실패() throws Exception{
+        //given
+        TransactionRequest request = new TransactionRequest("abc@abc.com", "12345678876", "1234",
+                BigDecimal.valueOf(10000));
+
+        TransactionCancelRequest cancelRequest = new TransactionCancelRequest(
+                1L,"234567891",20000L
+        );
+
+        Member member = Member.builder()
+                .email("abc@abc.com")
+                .nickName("abc")
+                .password("1234")
+                .accounts(new ArrayList<>())
+                .build();
+
+        Account account = Account.builder()
+                .accountNumber("234567891")
+                .balance(BigDecimal.valueOf(100000))
+                .member(member)
+                .password("1234")
+                .build();
+
+        member.getAccounts().add(account);
+
+        Transaction transaction = Transaction.builder()
+                .transactionType(TransactionType.USE)
+                .amountAfterTransaction(account.getBalance().subtract(request.amount()))
+                .transactionResult(TransactionResult.SUCCESS)
+                .account(account)
+                .amount(BigDecimal.valueOf(10000L))
+                .transactedAt(LocalDateTime.now())
+                .build();
+        //when
+        when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
+        when(transactionRepository.findById(any(Long.class))).thenReturn(Optional.of(transaction));
+
+        //then
+        assertThatThrownBy(() -> transactionService.transactionCancel(cancelRequest))
+                .isInstanceOf(NotMatchTransactionAmountException.class);
+    }
+
+    @Test
+    @DisplayName("거래 내역이 1년이 지나 잔액 사용 취소 실패")
+    void 거래_내역이_1년이_지나_잔액_사용_취소_실패() throws Exception{
+        //given
+        TransactionRequest request = new TransactionRequest("abc@abc.com", "12345678876", "1234",
+                BigDecimal.valueOf(10000));
+
+        TransactionCancelRequest cancelRequest = new TransactionCancelRequest(
+                1L,"234567891",10000L
+        );
+
+        Member member = Member.builder()
+                .email("abc@abc.com")
+                .nickName("abc")
+                .password("1234")
+                .accounts(new ArrayList<>())
+                .build();
+
+        Account account = Account.builder()
+                .accountNumber("234567891")
+                .balance(BigDecimal.valueOf(100000))
+                .member(member)
+                .password("1234")
+                .build();
+
+        member.getAccounts().add(account);
+
+        Transaction transaction = Transaction.builder()
+                .transactionType(TransactionType.USE)
+                .amountAfterTransaction(account.getBalance().subtract(request.amount()))
+                .transactionResult(TransactionResult.SUCCESS)
+                .account(account)
+                .amount(BigDecimal.valueOf(10000L))
+                .transactedAt(LocalDateTime.of(2023,1,12,0,0,0))
+                .build();
+        //when
+        when(accountRepository.getByAccountNumber(anyString())).thenReturn(account);
+        when(transactionRepository.findById(any(Long.class))).thenReturn(Optional.of(transaction));
+
+        //then
+        assertThatThrownBy(() -> transactionService.transactionCancel(cancelRequest))
+                .isInstanceOf(OldTransactionOrderException.class);
     }
 }
