@@ -390,6 +390,7 @@ public class TransactionServiceTest {
         //then
         assertThatThrownBy(() -> transactionService.transactionCancel(cancelRequest))
                 .isInstanceOf(NotMatchTransactionAccountException.class);
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
 
     @Test
@@ -434,6 +435,7 @@ public class TransactionServiceTest {
         //then
         assertThatThrownBy(() -> transactionService.transactionCancel(cancelRequest))
                 .isInstanceOf(NotMatchTransactionAmountException.class);
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
 
     @Test
@@ -478,5 +480,6 @@ public class TransactionServiceTest {
         //then
         assertThatThrownBy(() -> transactionService.transactionCancel(cancelRequest))
                 .isInstanceOf(OldTransactionOrderException.class);
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
 }
