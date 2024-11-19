@@ -50,8 +50,8 @@ Double Spend Issue: 두 개의 트랜잭션이 동시에 동일한 계좌에서 
 [✅ Double Spend Issue 문제 해결 방법](https://sangyunpark99.tistory.com/17)
 
 
-### 2. 이벤트로 인해 발생할 수 있는 서버 부하 문제
-신규 가입 이벤트로 인해서 동시에 만명의 유저가 가입 요청을 하게되는 경우, 급격한 트래픽 증가로 인해 서버 시스템에 과부하가 오는 상황
+### 2. 선착순 결제 이벤트로 발생하는 급증하는 트래픽 문제
+선착순 결제 이벤트로 인해서, 수십배의 트래픽이 순간적으로 발생하게 되어 응답시간 지연으로 인해 사용자 경험에 악영향을 미치는 상황
 
 [트래픽 부하 문제 해결](https://sangyunpark99.tistory.com/entry/%ED%9A%8C%EC%9B%90-%EA%B0%80%EC%9E%85-%EC%9D%B4%EB%B2%A4%ED%8A%B8%EB%A1%9C-%EC%9D%B8%ED%95%B4-%EC%83%9D%EA%B8%B0%EB%8A%94-%ED%8A%B8%EB%9E%98%ED%94%BD-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0feat-%ED%8A%B8%EB%9E%98%ED%94%BD-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0)
 
