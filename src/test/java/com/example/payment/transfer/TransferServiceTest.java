@@ -157,7 +157,7 @@ public class TransferServiceTest {
                 .accountNumber(withdrawalAccountNumber)
                 .balance(BigDecimal.ZERO)
                 .password("1234")
-                .build  ();
+                .build();
 
         //when
         when(accountRepository.getByAccountNumberForUpdate(withdrawalAccountNumber)).thenReturn(withdrawalAccount);

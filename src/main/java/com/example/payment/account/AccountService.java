@@ -53,7 +53,7 @@ public class AccountService {
 
         return AccountDto.from(member.getEmail(),
                 savedAccount.getAccountNumber(), account.getBalance(),
-                account.getRegisteredAt(),null);
+                account.getRegisteredAt(),account.getUnregisteredAt());
     }
 
     @Transactional
@@ -76,7 +76,7 @@ public class AccountService {
 
         account.updateUnregisteredAt();
 
-        return AccountDto.from(member.getEmail(), account.getAccountNumber(), null, null, account.getUnregisteredAt());
+        return AccountDto.from(member.getEmail(), account.getAccountNumber(), account.getBalance(), account.getRegisteredAt(), account.getUnregisteredAt());
     }
 
     @Transactional(readOnly = true)
@@ -85,7 +85,7 @@ public class AccountService {
                 accountNumber);
 
         return AccountDto.from(null, account.getAccountNumber(),
-                account.getBalance(), account.getRegisteredAt(),null);
+                account.getBalance(), account.getRegisteredAt(),account.getUnregisteredAt());
     }
 
     @Transactional(readOnly = true)
@@ -95,7 +95,7 @@ public class AccountService {
         return member.getAccounts().stream()
                 .map(account -> AccountDto.from(email,
                         account.getAccountNumber(), account.getBalance(),
-                        account.getRegisteredAt(),null)).collect(
+                        account.getRegisteredAt(),account.getUnregisteredAt())).collect(
                         Collectors.toList());
     }
 }

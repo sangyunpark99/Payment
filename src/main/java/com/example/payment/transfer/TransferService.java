@@ -40,11 +40,11 @@ public class TransferService {
             throw new NotEnoughWithdrawalMoney();
         }
         final BigDecimal amountAfterWithdrawal =  withdrawalAccount.getBalance().subtract(transferAmount);
-        withdrawalAccount.updateBalance(amountAfterWithdrawal);
+        withdrawalAccount.subtractBalance(transferAmount);
 
         // 4. 입금 계좌에 입금 액수만큼 더해준다.
         final BigDecimal amountAfterDeposit =  depositAccount.getBalance().add(transferAmount);
-        depositAccount.updateBalance(amountAfterDeposit);
+        depositAccount.addBalance(transferAmount);
 
         // 5. 이체 내역을 기록한다.
         TransferHistory transferHistory = TransferHistory.builder()

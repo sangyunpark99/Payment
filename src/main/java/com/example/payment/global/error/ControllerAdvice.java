@@ -4,11 +4,12 @@ import com.example.payment.account.exception.AlreadyUnregisteredException;
 import com.example.payment.account.exception.AlreadyExistedBalanceException;
 import com.example.payment.account.exception.NotEqualAccountUserException;
 import com.example.payment.account.exception.NotExistAccountException;
-import com.example.payment.global.error.dto.ErrorResponse;
+import com.example.payment.global.error.response.ErrorResponse;
 import com.example.payment.global.exception.NotMatchPasswordException;
 import com.example.payment.member.exception.AlreadyExistedFiveAccount;
 import com.example.payment.member.exception.AlreadyExistedUserException;
 import com.example.payment.member.exception.NotExistMemberException;
+import com.example.payment.transaction.exception.NotUseAccountException;
 import com.example.payment.transfer.exception.NotEnoughWithdrawalMoney;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -66,7 +67,8 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             NotExistMemberException.class,
-            NotExistAccountException.class
+            NotExistAccountException.class,
+            NotUseAccountException.class
     })
     public ResponseEntity<ErrorResponse> handleNotExist(RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

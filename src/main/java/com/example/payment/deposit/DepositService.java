@@ -27,7 +27,7 @@ public class DepositService {
             throw new NotMatchPasswordException();
         }
 
-        account.updateBalance(amount);
+        account.addBalance(amount);
     }
 
     private boolean checkPassword(final String requestPassword, final String accountPassword) {
