@@ -56,8 +56,5 @@ Double Spend Issue: 두 개의 트랜잭션이 동시에 동일한 계좌에서 
 [트래픽 부하 문제 해결](https://sangyunpark99.tistory.com/entry/%ED%9A%8C%EC%9B%90-%EA%B0%80%EC%9E%85-%EC%9D%B4%EB%B2%A4%ED%8A%B8%EB%A1%9C-%EC%9D%B8%ED%95%B4-%EC%83%9D%EA%B8%B0%EB%8A%94-%ED%8A%B8%EB%9E%98%ED%94%BD-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0feat-%ED%8A%B8%EB%9E%98%ED%94%BD-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0)
 
 
-### 3. 이슈를 완료할 때마다 일일히 AWS EC2에 배포해야 하는 문제
-
-
 ## ✍🏻 블로그
 https://sangyunpark99.tistory.com/
